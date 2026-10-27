@@ -1,11 +1,11 @@
 """Bot do Discord do Sindicato: organiza o servidor e responde comandos.
 
 Comandos (barra "/" no chat):
-  /organizar  cria a categoria, os canais e o cargo do Sindicato (só administrador)
+  /organizar  cria a categoria, os canais e o cargo do Sindicato (só o dono do bot)
   /placar     placar das estratégias de um mercado
   /vendedor   como está o simulado ao vivo de um mercado
-  /parar      botão de emergência do SIMULADO (só administrador)
-  /religar    libera o Vendedor de novo (só administrador)
+  /parar      botão de emergência do SIMULADO (só o dono do bot)
+  /religar    libera o Vendedor de novo (só o dono do bot)
 
 O bot só lê relatórios e aperta o botão de parar do simulado. Não manda ordem para
 corretora. O token fica no .env (DISCORD_BOT_TOKEN), nunca no código.
@@ -122,8 +122,12 @@ def rodar(token: str) -> None:
         e.set_footer(text=RODAPE)
         return e
 
+    # Os comandos que mexem no PC (parar, religar) e no servidor (organizar) só obedecem ao
+    # dono do bot no Developer Portal: outro administrador do servidor não consegue usar.
+    dono = {"id": None}
+
     def admin(interacao: discord.Interaction) -> bool:
-        return bool(getattr(interacao.user, "guild_permissions", None) and interacao.user.guild_permissions.administrator)
+        return dono["id"] is not None and interacao.user.id == dono["id"]
 
     @arvore.command(name="placar", description="Placar das estratégias de um mercado")
     @app_commands.describe(mercado="Nasdaq ou mini índice")
@@ -142,7 +146,7 @@ def rodar(token: str) -> None:
     @app_commands.guild_only()
     async def cmd_parar(interacao: discord.Interaction):
         if not admin(interacao):
-            await interacao.response.send_message("Só administrador pode apertar o botão de parar.", ephemeral=True)
+            await interacao.response.send_message("Só o dono do bot pode apertar o botão de parar.", ephemeral=True)
             return
         apertar_parar()
         await interacao.response.send_message(
@@ -154,7 +158,7 @@ def rodar(token: str) -> None:
     @app_commands.guild_only()
     async def cmd_religar(interacao: discord.Interaction):
         if not admin(interacao):
-            await interacao.response.send_message("Só administrador pode religar.", ephemeral=True)
+            await interacao.response.send_message("Só o dono do bot pode religar.", ephemeral=True)
             return
         religar()
         await interacao.response.send_message(
@@ -165,7 +169,7 @@ def rodar(token: str) -> None:
     @app_commands.guild_only()
     async def cmd_organizar(interacao: discord.Interaction):
         if not admin(interacao):
-            await interacao.response.send_message("Só administrador pode organizar o servidor.", ephemeral=True)
+            await interacao.response.send_message("Só o dono do bot pode organizar o servidor.", ephemeral=True)
             return
         await interacao.response.defer(ephemeral=True, thinking=True)
         servidor = interacao.guild
@@ -197,6 +201,8 @@ def rodar(token: str) -> None:
 
     @cliente.event
     async def on_ready():
+        info = await cliente.application_info()
+        dono["id"] = info.owner.id
         # Registrar os comandos em cada servidor faz eles aparecerem na hora (o global demora).
         for servidor in cliente.guilds:
             arvore.copy_global_to(guild=servidor)
