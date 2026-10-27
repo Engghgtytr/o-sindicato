@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>O Sindicato · tudo o que o robô fez</title>
+    <meta name="description" content="Painel local do laboratório O Sindicato: estratégias testadas, coin flip, sindicato, simulado ao vivo e diário de pesquisa." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23b07a10'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+    <header class="topo">
+      <div class="wrap topo__linha">
+        <div>
+          <p class="marca">O Sindicato</p>
+          <p class="sub" id="gerado"></p>
+        </div>
+        <p class="selo">Simulado · nenhuma ordem real</p>
+      </div>
+      <div class="wrap mercados" id="mercados" role="group" aria-label="Escolher mercado"></div>
+      <nav class="wrap abas" role="tablist" aria-label="Seções do painel" id="abas"></nav>
+    </header>
+    <main class="wrap" id="conteudo" tabindex="-1"></main>
+    <footer class="wrap rodape">
+      <p>Projeto de estudo e de portfólio. Não é recomendação de investimento. Dados grátis do Yahoo Finance: Nasdaq-100 (índice no backtest, futuro NQ=F atrasado no simulado) e Ibovespa (no lugar do mini índice WIN, que o Yahoo não tem).</p>
+    </footer>
+    <script src="dados.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,45 @@
+{
+  "_leia": "Regras do laboratório. Nada secreto aqui: a chave do Discord fica no arquivo .env.",
+  "instrumento_padrao": "mnq",
+  "instrumentos": {
+    "mnq": {
+      "nome": "Nasdaq-100 (contrato micro MNQ)",
+      "simbolo": "US$",
+      "dados": { "serie_backtest": "^NDX", "serie_ao_vivo": "NQ=F" },
+      "contrato": {
+        "valor_por_ponto": 2.0,
+        "tick": 0.25,
+        "comissao_por_lado": 0.62,
+        "slippage_ticks_por_lado": 1
+      },
+      "mercado": { "fuso": "America/New_York", "abre": "09:30", "fecha": "16:00", "processa": "16:15" },
+      "risco": { "contratos": 1, "perda_maxima_diaria": 300.0, "limite_drawdown_conta": 2000.0 }
+    },
+    "win": {
+      "nome": "Ibovespa (minicontrato WIN)",
+      "simbolo": "R$",
+      "_dados": "O Yahoo não tem o contrato WIN: usamos o índice Ibovespa, que o WIN acompanha.",
+      "dados": { "serie_backtest": "^BVSP", "serie_ao_vivo": "^BVSP" },
+      "contrato": {
+        "valor_por_ponto": 0.20,
+        "tick": 5,
+        "comissao_por_lado": 0.50,
+        "_comissao": "Estimativa: corretagem zero + taxas da B3. Confira a tabela da sua corretora.",
+        "slippage_ticks_por_lado": 1
+      },
+      "mercado": { "fuso": "America/Sao_Paulo", "abre": "10:00", "fecha": "17:00", "processa": "17:30" },
+      "risco": { "contratos": 1, "perda_maxima_diaria": 300.0, "limite_drawdown_conta": 2000.0 },
+      "imposto": { "day_trade": 0.20, "swing_trade": 0.15, "_leia": "Estimativa do IR sobre o lucro, com compensação de prejuízos mês a mês." }
+    }
+  },
+  "periodos": {
+    "treino_inicio": "2010-01-01",
+    "treino_fim": "2020-12-31",
+    "cego_inicio": "2021-01-01"
+  },
+  "avaliacao": {
+    "rodadas_coin_flip": 500,
+    "rodadas_monte_carlo": 5000,
+    "alfa": 0.05
+  }
+}

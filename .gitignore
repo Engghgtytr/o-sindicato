@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+
+# Segredos (webhook do Discord)
+.env
+
+# Dados baixados e resultados gerados: cada pessoa gera os seus
+dados/
+relatorios/
+logs/
+estado*.json
+estado*.tmp
+PARAR*
+painel/dados.js
